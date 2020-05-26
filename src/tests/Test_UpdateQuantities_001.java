@@ -3,6 +3,7 @@ package tests;
 import org.junit.Test;
 import org.openqa.selenium.support.PageFactory;
 
+import pageObjects.Cart;
 import pageObjects.HomePage;
 import pageObjects.Product;
 import pageObjects.Products;
@@ -18,7 +19,7 @@ public class Test_UpdateQuantities_001 extends BaseTest{
 				
 		Products products = PageFactory.initElements(driver,Products.class);
 		//select a product
-		products.chooseProducts(19);
+		products.chooseProduct(3);
 				
 		//initialize product page
 		Product product = PageFactory.initElements(driver,Product.class);
@@ -27,7 +28,9 @@ public class Test_UpdateQuantities_001 extends BaseTest{
 				
 		product.editCart();
 		
-		product.updateQuantity("3");
+		Cart cart = PageFactory.initElements(driver,Cart.class);
+		
+		cart.updateQuantity("3");
 		
 	}
 	

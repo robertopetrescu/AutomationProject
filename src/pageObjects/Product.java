@@ -10,7 +10,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Product {
 	
@@ -35,31 +37,35 @@ public class Product {
 	@FindBy(how=How.CSS, using="span[data-bind=\"i18n: 'View and Edit Cart'\"]")
 	WebElement editCartBtn;
 	
-	@FindBy(how=How.CLASS_NAME, using="input-text qty")
-	WebElement quantityItem;
-	
-	@FindBy(how=How.ID, using=".cart-price .price")
-	List<WebElement> prices;
-	
 	@FindBy(how=How.ID, using ="attribute92")
 	WebElement colorOption;
-	Select color;
+	
+	
+	WebDriver _driver;
+	
+	public Product(WebDriver driver) {
+		_driver = driver;
+	}
 	
 	public void addToCart(boolean closeCart) throws InterruptedException {
 		
 		//Check if element has color selection dropdown
-		/*
-		if(_driver.findElements(By.id("attribute92") ).size() != 0) {
-			color = new Select(colorOption);
-			color.selectByIndex(0);
-		}*/
+		Boolean isPresent = _driver.findElements(By.id("attribute92")).size() > 0;
+		if(isPresent) {
+			Select color = new Select(_driver.findElement(By.id("attribute92")));
+			color.selectByIndex(1);
+		}
 		
+		Thread.sleep(2000);
 		addToCartBtn.click();
-
+		
+		Thread.sleep(2000);
+		
 		if(closeCart)
 			closeMiniCart();
 		
 	}
+	
 	
 	public void removeFromCart(WebDriver driver, int product) throws InterruptedException {
 		
@@ -76,11 +82,7 @@ public class Product {
 		
 	}
 
-	public void updateQuantity(String items) {
-		quantityItem.sendKeys(items);
-		
-	}
-
+	
 	public void editCart() {
 		editCartBtn.click();
 		
@@ -92,6 +94,8 @@ public class Product {
 	}
 	
 	public void closeMiniCart() {
-		closeMiniCart.click();;
+		closeMiniCart.click();
 	}
+	
+	
 }

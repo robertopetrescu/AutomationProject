@@ -18,27 +18,30 @@ public class Test_AddProducts_001 extends BaseTest{
 
 	@Test
 	public void addProductsToCart() throws InterruptedException {
-		//open homepage
+		
+		//initialize HomePage
 		HomePage homepage = PageFactory.initElements(driver,HomePage.class);
 		//click on products
 		homepage.clickProducts();
 
-		
+		//initialize Products page
 		Products products = PageFactory.initElements(driver,Products.class);
 		//select a product
-		products.chooseProducts(19);
+		products.chooseProduct(3);
 		
-		//initialize product page
+		//initialize single product page
 		Product product = PageFactory.initElements(driver,Product.class);
 		//add product to cart
 		product.addToCart(true);
 		//check item is added to cart
 		product.itemIsAddedToCartSidebar();
+		
 		//go back to products page
 		homepage.clickProducts();
+		
 		//add another product to cart
-		products.chooseProducts(26);
-		//add product to cart and don't close 
+		products.chooseProduct(4);
+		//add product to cart and don't close miniCart
 		product.addToCart(false);
 		
 		product.itemIsAddedToCartSidebar();
