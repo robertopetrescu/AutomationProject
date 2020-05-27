@@ -2,6 +2,7 @@ package pageObjects;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -11,24 +12,23 @@ import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
 
-public class Products {
-	
-	WebDriver _driver;
+public class Products extends BasePage {
 	
 	public Products(WebDriver driver) {
-		_driver = driver;
+		super(driver);
 	}
 	
 	// Method 1: create a webelement only with the items that correspond
 	  
-	  //Create a list of Web Elements that can be added to cart
+	//Create a list of Web Elements that can be added to cart
 	//Then go to the second parent to go to the product details
-	@FindBy(how=How.XPATH, using ="//button[@title='Add to Cart']/ancestor::div[2]")
+	@FindBy(how=How.XPATH, using ="//button[@title='Add to Cart']/ancestor::div[2]|//a[@title='View Details']")
 	List<WebElement> allProducts;
 	
 	//Click on specified element
-	public void chooseProduct(int product) {
-		allProducts.get(product).click();
+	public void chooseProduct(int product) throws InterruptedException {
+		Thread.sleep(3000);
+		clickElement(allProducts.get(product));
 	}
 	
 	// Method 2: create a List and filter

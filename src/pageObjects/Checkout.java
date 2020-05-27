@@ -3,6 +3,7 @@ package pageObjects;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -12,12 +13,10 @@ import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class Checkout {
+public class Checkout extends BasePage{
 	
-	 WebDriver _driver;
-		
 	public Checkout(WebDriver driver) {
-		_driver = driver;
+		super(driver);
 	}
 	
 	@FindBy(how=How.CSS, using=".action.primary.checkout.amasty")
@@ -63,48 +62,67 @@ public class Checkout {
 			assertTrue(LastName.getAttribute("aria-describedby").contains("error"));
 			assertTrue(StreetAddress.getAttribute("aria-describedby").contains("error"));
 			assertTrue(City.getAttribute("aria-describedby").contains("error"));
-			Thread.sleep(3000);
+			_driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 	}
-	public void ss() {
-		//var wait = new WebDriverWait(_driver, 20);
-		//wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector("#checkout-loader")));
-		//wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".action.primary.checkout.amasty")));
+	
+	public void placeOrder() {
+		
 	}
 	
 	public boolean CheckExpressShipping() throws InterruptedException {
+		
+		//waitForElementToDissapear(_driver.findElement(By.cssSelector("#checkout-loader")),15);
+		waitForElementToBeClickable(ExpressShipping.get(0),15);
+		//Save Total cost with economy shipping and radio button value with Shipping
 		double totalWithEconomyShipping = Double.parseDouble(TotalAmount.getText().substring(1).replace(",", ""));
 		double expressShipping = Double.parseDouble(ExpressShipping.get(1).findElement(By.cssSelector("span span[class=price]")).getText().substring(1).replace(",", ""));
 		
-		ExpressShipping.get(0).click();
+		//Click on Express Shipping radio button
+		clickElement(ExpressShipping.get(0));
 		
-		Thread.sleep(3000);
+		//Get new Total order value after Express Shipping was selected
 		double totalWithExpressShipping = Double.parseDouble(TotalAmount.getText().substring(1).replace(",", ""));
 		
+		//Return true if the Order value + express shipping radio button value
+		//equals the new Total amout else return false
 		if(totalWithEconomyShipping + expressShipping == totalWithExpressShipping) {
 			return true;
-		}else
+		}else {
 			return false;
+		}
 	}
 	
 	public void populateFields(String email, String firstName, String lastName, String address, long phone, String creditCard) throws InterruptedException {
+		
+		//Split values into separate strings
+		String address_split[] = address.split(",");
+		String credit_card[] = creditCard.split(",");
+		
+		//Populate fields
+		waitForElement(EmailAddress,10);
 		EmailAddress.sendKeys(email);
 		FirstName.sendKeys(firstName);
 		LastName.sendKeys(lastName);
-		String address_split[] = address.split(",");
-		String credit_card[] = creditCard.split(",");
 		StreetAddress.sendKeys(address_split[0]);
 		City.sendKeys(address_split[1]);
 		PostalCode.clear();
 		PostalCode.sendKeys(address_split[2]);
 		PhoneNumber.sendKeys(String.valueOf(phone));
+		
+		//Switch to Credit Card iFrame
 		_driver.switchTo().frame(_driver.findElement(By.name("__privateStripeFrame5")));
+		
+		//Populate credit card values
 		_driver.findElement(By.name("cardnumber")).sendKeys(credit_card[0]);
 		_driver.findElement(By.name("exp-date")).sendKeys(credit_card[1]);
 		_driver.findElement(By.name("cvc")).sendKeys(credit_card[2]);
+		
+		//Switch back to default content
 		_driver.switchTo().defaultContent();
-		Thread.sleep(4000);
-		PlaceOrder.click();
-		Thread.sleep(2000);
+		
+		//Click on Place Order
+		clickElement(PlaceOrder);
+		waitForElement(ErrorMessage,10);
 	}
 	
 }

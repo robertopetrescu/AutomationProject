@@ -2,6 +2,7 @@ package pageObjects;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -14,7 +15,13 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class Product {
+public class Product extends BasePage{
+	
+	public Product(WebDriver driver) 
+	{
+		super(driver);
+	}
+	
 	
 	@FindBy(how=How.ID, using ="product-addtocart-button")
 	WebElement addToCartBtn;
@@ -40,65 +47,55 @@ public class Product {
 	@FindBy(how=How.ID, using ="attribute92")
 	WebElement colorOption;
 	
-	
-	WebDriver _driver;
-	
-	public Product(WebDriver driver) 
-	{
-		_driver = driver;
-	}
-	
-	public void addToCart(boolean closeCart) throws InterruptedException 
+	public void addToCart() throws InterruptedException 
 	{
 		
-		//Check if element has color selection dropdown
+		//Check if element has color selection dropdown and select it if so
 		Boolean isPresent = _driver.findElements(By.id("attribute92")).size() > 0;
 		if(isPresent) {
 			Select color = new Select(_driver.findElement(By.id("attribute92")));
 			color.selectByIndex(1);
 		}
 		
-		Thread.sleep(3000);
-		addToCartBtn.click();
-		
-		Thread.sleep(7000);
-		
-		if(closeCart)
-			closeMiniCart();
-		Thread.sleep(1500);
-		
+		//Add to cart
+		clickElement(addToCartBtn);
 	}
 	
+	public boolean checkIfElementIsPresent() {
+		try {
+			colorOption.isDisplayed();
+			System.out.println("present");
+			return true;
+		}catch(NoSuchElementException e) {
+			System.out.println("not present");
+			return false;
+		}
+	}
 	
 	public void removeFromCart(int product) throws InterruptedException 
 	{
 		
-		removeProducts.get(product).click();
+		clickElement(removeProducts.get(product));
 		
-		Thread.sleep(3000);
+		clickElement(acceptRemovalBtn);
 		
-		acceptRemovalBtn.click();;
-		
-		Thread.sleep(4000);
-
 		closeMiniCart();
-		
-		Thread.sleep(3000);
 		
 	}
 	
 	public void editCart() 
 	{
-		editCartBtn.click();	
+		clickElement(editCartBtn);
 	}
 	
 	public void itemIsAddedToCartSidebar() 
 	{
+		waitForElement(miniCartMessage, 10);
 		miniCartMessage.isDisplayed();
 	}
 	
 	public void closeMiniCart() {
-		closeMiniCart.click();
+		clickElement(closeMiniCart);
 	}
 	
 	

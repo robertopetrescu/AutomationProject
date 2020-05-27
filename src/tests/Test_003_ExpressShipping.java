@@ -15,32 +15,37 @@ public class Test_003_ExpressShipping extends BaseTest{
 	
 	@Test
 	public void expressShipping() throws InterruptedException {
-		//open homepage
+		
+		//Initialize Homepage class
 		HomePage homepage = PageFactory.initElements(driver,HomePage.class);
-		//click on products
+		
+		//Click on products
 		homepage.clickProducts();
-						
+		
+		//Initialize All Products class
 		Products products = PageFactory.initElements(driver,Products.class);
-		//select a product
-		products.chooseProduct(3);
-						
-		Thread.sleep(2000);
-		//initialize product page
+		
+		//Select a product
+		products.chooseProduct(4);
+		
+		//Initialize single Product class
 		Product product = PageFactory.initElements(driver,Product.class);
 				
-		//add to cart and don't close 
-		product.addToCart(false);
+		//Add to cart and don't close miniCart
+		product.addToCart();
 						
+		//Click on Edit Cart and user will be redirected to Cart page
 		product.editCart();
 		
+		//initialize Cart class
 		Cart cart = PageFactory.initElements(driver,Cart.class);
-			
-		cart.proceedToCheckout.click();
+		
+		//click on Proceed to checkout
+		cart.clickElement(cart.ProceedToCheckout);
 			
 		Checkout checkout = PageFactory.initElements(driver,Checkout.class);
-		//checkout.ss();
-		Thread.sleep(9000);
 		
+		//check if the new Total value is calculated correctly after pressing 'Express Shipping'
 		assertTrue(checkout.CheckExpressShipping(),"Express shipping price is not calculated correctly");
 	}
 }

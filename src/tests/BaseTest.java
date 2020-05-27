@@ -17,6 +17,7 @@ public class BaseTest {
 
 	public WebDriver driver;
 
+	//initialize driver and open website
     @Before
     public void setup(){
            System.setProperty("webdriver.chrome.driver","./Drivers/chromedriver.exe");
@@ -25,7 +26,8 @@ public class BaseTest {
            driver.manage().window().maximize();
            driver.get("https://eu.wahoofitness.com/");
     }
-
+    
+    //close browser
     @After
     public void tearDown(){
         driver.quit();

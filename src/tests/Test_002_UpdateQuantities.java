@@ -3,6 +3,8 @@ package tests;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.concurrent.TimeUnit;
+
 import org.junit.Test;
 import org.openqa.selenium.support.PageFactory;
 
@@ -16,21 +18,23 @@ public class Test_002_UpdateQuantities extends BaseTest{
 
 	@Test
 	public void updateQuantities() throws InterruptedException {
+		
 		//open homepage
 		HomePage homepage = PageFactory.initElements(driver,HomePage.class);
+		
 		//click on products
 		homepage.clickProducts();
 				
 		Products products = PageFactory.initElements(driver,Products.class);
 		//select a product
-		products.chooseProduct(3);
+		products.chooseProduct(4);
 				
 		Thread.sleep(2000);
 		//initialize product page
 		Product product = PageFactory.initElements(driver,Product.class);
 		
 		//add to cart and don't close 
-		product.addToCart(false);
+		product.addToCart();
 				
 		product.editCart();
 		
@@ -42,12 +46,13 @@ public class Test_002_UpdateQuantities extends BaseTest{
 		//check price
 		cart.checkSubTotal();
 		
-		cart.proceedToCheckout.click();
+		//proceed to checkout - Public WebElement
+		cart.clickElement(cart.ProceedToCheckout);
 			
 		Checkout checkout = PageFactory.initElements(driver,Checkout.class);
-		//checkout.ss();
-		Thread.sleep(14000);
-		checkout.PlaceOrder.click();
+		
+		//Place Order - public WebElement called from test
+		checkout.clickElement(checkout.PlaceOrder);
 		
 		checkout.checkErrorMessage();
 		

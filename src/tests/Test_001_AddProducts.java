@@ -29,26 +29,30 @@ public class Test_001_AddProducts extends BaseTest{
 		Products products = PageFactory.initElements(driver,Products.class);
 		
 		//select a product
-		products.chooseProduct(3);
+		products.chooseProduct(4);
 		
 		//initialize single product page
 		Product product = PageFactory.initElements(driver,Product.class);
 		
 		//add product to cart
-		product.addToCart(true);
+		product.addToCart();
 		
 		//check item is added to cart
 		product.itemIsAddedToCartSidebar();
+		
+		//close miniCart
+		product.closeMiniCart();
 		
 		//go back to products page
 		homepage.clickProducts();
 		
 		//add another product to cart
-		products.chooseProduct(4);
+		products.chooseProduct(5);
 		
 		//add product to cart and don't close miniCart
-		product.addToCart(false);
+		product.addToCart();
 		
+		////check item is added to cart
 		product.itemIsAddedToCartSidebar();
 		
 		//remove first element
