@@ -22,12 +22,12 @@ public class Products extends BasePage {
 	  
 	//Create a list of Web Elements that can be added to cart
 	//Then go to the second parent to go to the product details
-	@FindBy(how=How.XPATH, using ="//button[@title='Add to Cart']/ancestor::div[2]|//a[@title='View Details']")
+	@FindBy(how=How.XPATH, using ="//button[@title='Add to Cart']/ancestor::div[2]")
 	List<WebElement> allProducts;
 	
 	//Click on specified element
 	public void chooseProduct(int product) throws InterruptedException {
-		Thread.sleep(3000);
+		Thread.sleep(2000);
 		clickElement(allProducts.get(product));
 	}
 	

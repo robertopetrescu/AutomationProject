@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.Test;
 
-public class Test_004_BuyProductWithInvalidCreditCard extends BaseTest{
+public class Test_005_BuyProductWithInvalidCreditCard extends BaseTest{
 	
 	@Test
 	public void buyProduct() throws InterruptedException {

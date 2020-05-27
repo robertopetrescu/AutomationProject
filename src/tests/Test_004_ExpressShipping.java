@@ -11,7 +11,7 @@ import pageObjects.HomePage;
 import pageObjects.Product;
 import pageObjects.Products;
 
-public class Test_003_ExpressShipping extends BaseTest{
+public class Test_004_ExpressShipping extends BaseTest{
 	
 	@Test
 	public void expressShipping() throws InterruptedException {

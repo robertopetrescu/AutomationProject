@@ -46,6 +46,7 @@ public class Cart extends BasePage {
 	public void checkSubTotal() {
 		
 		//Get quantity
+		waitForElement(quantityItem,10);
 		int qty = Integer.parseInt(quantityItem.getAttribute("value"));
 		
 		//get price per product and subtotal values

@@ -50,8 +50,11 @@ public class Checkout extends BasePage{
 	@FindBy(how=How.CSS, using="tr[class='row amcheckout-method'] td")
 	List<WebElement> ExpressShipping;
 	
-	@FindBy(how=How.CSS, using="strong [class=price]")
-	WebElement TotalAmount;
+	@FindBy(how=How.CSS, using="span[data-th=\"Cart Subtotal\"]")
+	WebElement TotalAmountWithoutShipping;
+	
+	@FindBy(how=How.CSS, using="strong span[class=price]")
+	WebElement TotalAmountWithShipping;
 	
 	@FindBy(how=How.CSS, using="div[data-ui-id=checkout-cart-validationmessages-message-error]")
 	public WebElement ErrorMessage;
@@ -71,21 +74,23 @@ public class Checkout extends BasePage{
 	
 	public boolean CheckExpressShipping() throws InterruptedException {
 		
-		//waitForElementToDissapear(_driver.findElement(By.cssSelector("#checkout-loader")),15);
-		waitForElementToBeClickable(ExpressShipping.get(0),15);
+		waitForElementToDissapear(_driver.findElement(By.cssSelector("#checkout-loader")),15);
+		waitForElementToBeClickable(TotalAmountWithShipping,15);
+		//waitForElement(TotalAmount,10);
 		//Save Total cost with economy shipping and radio button value with Shipping
-		double totalWithEconomyShipping = Double.parseDouble(TotalAmount.getText().substring(1).replace(",", ""));
+		double totalPriceWithoutShipping = Double.parseDouble(TotalAmountWithoutShipping.getText().substring(1).replace(",", ""));
 		double expressShipping = Double.parseDouble(ExpressShipping.get(1).findElement(By.cssSelector("span span[class=price]")).getText().substring(1).replace(",", ""));
 		
 		//Click on Express Shipping radio button
 		clickElement(ExpressShipping.get(0));
 		
 		//Get new Total order value after Express Shipping was selected
-		double totalWithExpressShipping = Double.parseDouble(TotalAmount.getText().substring(1).replace(",", ""));
+		waitForElement(TotalAmountWithShipping,10);
+		double totalWithExpressShipping = Double.parseDouble(TotalAmountWithShipping.getText().substring(1).replace(",", ""));
 		
 		//Return true if the Order value + express shipping radio button value
 		//equals the new Total amout else return false
-		if(totalWithEconomyShipping + expressShipping == totalWithExpressShipping) {
+		if(totalPriceWithoutShipping + expressShipping == totalWithExpressShipping) {
 			return true;
 		}else {
 			return false;
