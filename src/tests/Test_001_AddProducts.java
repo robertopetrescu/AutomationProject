@@ -14,25 +14,29 @@ import pageObjects.Product;
 import pageObjects.Products;
 
 
-public class Test_AddProducts_001 extends BaseTest{
+public class Test_001_AddProducts extends BaseTest{
 
 	@Test
 	public void addProductsToCart() throws InterruptedException {
 		
 		//initialize HomePage
 		HomePage homepage = PageFactory.initElements(driver,HomePage.class);
+		
 		//click on products
 		homepage.clickProducts();
 
 		//initialize Products page
 		Products products = PageFactory.initElements(driver,Products.class);
+		
 		//select a product
 		products.chooseProduct(3);
 		
 		//initialize single product page
 		Product product = PageFactory.initElements(driver,Product.class);
+		
 		//add product to cart
 		product.addToCart(true);
+		
 		//check item is added to cart
 		product.itemIsAddedToCartSidebar();
 		
@@ -41,12 +45,14 @@ public class Test_AddProducts_001 extends BaseTest{
 		
 		//add another product to cart
 		products.chooseProduct(4);
+		
 		//add product to cart and don't close miniCart
 		product.addToCart(false);
 		
 		product.itemIsAddedToCartSidebar();
-		//to remove alert somehow..
-		product.removeFromCart(driver,0);
+		
+		//remove first element
+		product.removeFromCart(0);
 		
 	}
 }

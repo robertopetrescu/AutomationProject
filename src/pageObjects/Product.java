@@ -31,7 +31,7 @@ public class Product {
 	@FindBy(how=How.CSS, using ="span[data-bind=\"i18n: 'Remove'\"]")
 	List<WebElement> removeProducts;
 	
-	@FindBy(how=How.CLASS_NAME, using ="action-primary action-accept")
+	@FindBy(how=How.XPATH, using ="//footer[@class='modal-footer']/button[2]")
 	WebElement acceptRemovalBtn;
 	
 	@FindBy(how=How.CSS, using="span[data-bind=\"i18n: 'View and Edit Cart'\"]")
@@ -43,11 +43,13 @@ public class Product {
 	
 	WebDriver _driver;
 	
-	public Product(WebDriver driver) {
+	public Product(WebDriver driver) 
+	{
 		_driver = driver;
 	}
 	
-	public void addToCart(boolean closeCart) throws InterruptedException {
+	public void addToCart(boolean closeCart) throws InterruptedException 
+	{
 		
 		//Check if element has color selection dropdown
 		Boolean isPresent = _driver.findElements(By.id("attribute92")).size() > 0;
@@ -56,40 +58,42 @@ public class Product {
 			color.selectByIndex(1);
 		}
 		
-		Thread.sleep(2000);
+		Thread.sleep(3000);
 		addToCartBtn.click();
 		
-		Thread.sleep(2000);
+		Thread.sleep(7000);
 		
 		if(closeCart)
 			closeMiniCart();
+		Thread.sleep(1500);
 		
 	}
 	
 	
-	public void removeFromCart(WebDriver driver, int product) throws InterruptedException {
+	public void removeFromCart(int product) throws InterruptedException 
+	{
 		
 		removeProducts.get(product).click();
 		
-		Thread.sleep(2000);
+		Thread.sleep(3000);
 		
-		//Accept alert..somehow
-		//driver.switchTo().alert().accept();
+		acceptRemovalBtn.click();;
 		
+		Thread.sleep(4000);
+
 		closeMiniCart();
 		
 		Thread.sleep(3000);
 		
 	}
-
 	
-	public void editCart() {
-		editCartBtn.click();
-		
+	public void editCart() 
+	{
+		editCartBtn.click();	
 	}
-
 	
-	public void itemIsAddedToCartSidebar() {
+	public void itemIsAddedToCartSidebar() 
+	{
 		miniCartMessage.isDisplayed();
 	}
 	
