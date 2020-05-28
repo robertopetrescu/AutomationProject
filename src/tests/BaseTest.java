@@ -22,6 +22,7 @@ public class BaseTest {
     public void setup(){
            System.setProperty("webdriver.chrome.driver","./Drivers/chromedriver.exe");
            driver = new ChromeDriver();
+           //move on second monitor
            driver.manage().window().setPosition(new Point(2000,0));
            driver.manage().window().maximize();
            driver.get("https://eu.wahoofitness.com/");

@@ -83,22 +83,25 @@ public class Checkout extends BasePage{
 	public boolean CheckExpressShipping() throws InterruptedException {
 		
 		waitForElementToDissapear(_driver.findElement(By.cssSelector("#checkout-loader")),15);
-		waitForElementToBeClickable(TotalAmountWithShipping,15);
+		waitForElement(TotalAmountWithShipping,15);
+		waitForElement(ExpressShipping.get(1),15);
 		
 		//Save Total cost with economy shipping and radio button value with Shipping
 		double totalPriceWithoutShipping = Double.parseDouble(TotalAmountWithoutShipping.getText().substring(1).replace(",", ""));
 		double expressShipping = Double.parseDouble(ExpressShipping.get(1).findElement(By.cssSelector("span span[class=price]")).getText().substring(1).replace(",", ""));
-		
+		System.out.println(totalPriceWithoutShipping);
+		System.out.println(expressShipping);
 		
 		//Click on Express Shipping radio button
+		waitForElementToBeClickable(ExpressShipping.get(0),10);
 		clickElement(ExpressShipping.get(0));
 		
 		
 		//Get new Total order value after Express Shipping was selected
-		Thread.sleep(2000);
+		Thread.sleep(4000);
 		waitForElement(TotalAmountWithShipping,10);
 		double totalWithExpressShipping = Double.parseDouble(TotalAmountWithShipping.getText().substring(1).replace(",", ""));
-
+		System.out.println(totalWithExpressShipping);
 		//Return true if the Order value + express shipping radio button value
 		//equals the new Total amout else return false
 		if(totalPriceWithoutShipping + expressShipping == totalWithExpressShipping) {
@@ -139,6 +142,7 @@ public class Checkout extends BasePage{
 		
 		//Click on Place Order
 		//waitForElementToDissapear(CheckoutLoader,10)
+		Thread.sleep(2000);
 		waitForElementToBeClickable(PlaceOrder,10);
 		clickElement(PlaceOrder);
 		waitForElement(ErrorMessage,10);
