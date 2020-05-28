@@ -17,8 +17,9 @@ public class Test_005_BuyProductWithInvalidCreditCard extends BaseTest{
 	@Test
 	public void buyProduct() throws InterruptedException {
 			
-			//open homepage
+			//Initialize Homepage class
 			HomePage homepage = PageFactory.initElements(driver,HomePage.class);
+			
 			//click on products
 			homepage.clickProducts();
 							
@@ -35,12 +36,13 @@ public class Test_005_BuyProductWithInvalidCreditCard extends BaseTest{
 			product.editCart();
 			
 			Cart cart = PageFactory.initElements(driver,Cart.class);
-				
+			
+			//Proceed To checkout
 			cart.clickElement(cart.ProceedToCheckout);
 				
 			Checkout checkout = PageFactory.initElements(driver,Checkout.class);
-			//checkout.ss();
-
+			
+			//Populate mandatory fields to buy
 			checkout.populateFields("someone@whocares.com", "Test", "Tester", "Comandante Izarduy 67, Barcelona, 08940", 1113344455566L, "4111111111111111, 08/24, 111");
 			
 			assertTrue(checkout.ErrorMessage.isDisplayed(),"There was no error message");

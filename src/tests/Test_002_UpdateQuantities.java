@@ -35,7 +35,8 @@ public class Test_002_UpdateQuantities extends BaseTest{
 		
 		//add to cart and don't close 
 		product.addToCart();
-				
+		
+		//Click on 'View or Edit' Cart
 		product.editCart();
 		
 		Cart cart = PageFactory.initElements(driver,Cart.class);

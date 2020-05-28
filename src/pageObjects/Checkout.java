@@ -19,7 +19,7 @@ public class Checkout extends BasePage{
 		super(driver);
 	}
 	
-	@FindBy(how=How.CSS, using=".action.primary.checkout.amasty")
+	@FindBy(how=How.XPATH, using="//button[@class='action primary checkout amasty']")
 	public WebElement PlaceOrder;
 	
 	@FindBy(how=How.CSS, using="div[class='control _with-tooltip'] #customer-email")
@@ -59,35 +59,46 @@ public class Checkout extends BasePage{
 	@FindBy(how=How.CSS, using="div[data-ui-id=checkout-cart-validationmessages-message-error]")
 	public WebElement ErrorMessage;
 	
+	@FindBy(how=How.NAME , using="cardnumber")
+	WebElement CardNumber;
+	
+	@FindBy(how=How.NAME , using="exp-date")
+	WebElement ExpDate;
+	
+	@FindBy(how=How.NAME , using="cvc")
+	WebElement CVC;
+	
+	@FindBy(how=How.NAME , using="__privateStripeFrame5")
+	WebElement cardiFrame;
+	
 	public void checkErrorMessage() throws InterruptedException {
 			assertTrue(EmailAddress.getAttribute("aria-describedby").contains("error"));
 			assertTrue(FirstName.getAttribute("aria-describedby").contains("error"));
 			assertTrue(LastName.getAttribute("aria-describedby").contains("error"));
 			assertTrue(StreetAddress.getAttribute("aria-describedby").contains("error"));
 			assertTrue(City.getAttribute("aria-describedby").contains("error"));
-			_driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 	}
 	
-	public void placeOrder() {
-		
-	}
 	
 	public boolean CheckExpressShipping() throws InterruptedException {
 		
 		waitForElementToDissapear(_driver.findElement(By.cssSelector("#checkout-loader")),15);
 		waitForElementToBeClickable(TotalAmountWithShipping,15);
-		//waitForElement(TotalAmount,10);
+		
 		//Save Total cost with economy shipping and radio button value with Shipping
 		double totalPriceWithoutShipping = Double.parseDouble(TotalAmountWithoutShipping.getText().substring(1).replace(",", ""));
 		double expressShipping = Double.parseDouble(ExpressShipping.get(1).findElement(By.cssSelector("span span[class=price]")).getText().substring(1).replace(",", ""));
 		
+		
 		//Click on Express Shipping radio button
 		clickElement(ExpressShipping.get(0));
 		
+		
 		//Get new Total order value after Express Shipping was selected
+		Thread.sleep(2000);
 		waitForElement(TotalAmountWithShipping,10);
 		double totalWithExpressShipping = Double.parseDouble(TotalAmountWithShipping.getText().substring(1).replace(",", ""));
-		
+
 		//Return true if the Order value + express shipping radio button value
 		//equals the new Total amout else return false
 		if(totalPriceWithoutShipping + expressShipping == totalWithExpressShipping) {
@@ -115,17 +126,20 @@ public class Checkout extends BasePage{
 		PhoneNumber.sendKeys(String.valueOf(phone));
 		
 		//Switch to Credit Card iFrame
-		_driver.switchTo().frame(_driver.findElement(By.name("__privateStripeFrame5")));
+		_driver.switchTo().frame(cardiFrame);
 		
 		//Populate credit card values
-		_driver.findElement(By.name("cardnumber")).sendKeys(credit_card[0]);
-		_driver.findElement(By.name("exp-date")).sendKeys(credit_card[1]);
-		_driver.findElement(By.name("cvc")).sendKeys(credit_card[2]);
+		
+		CardNumber.sendKeys(credit_card[0]);
+		ExpDate.sendKeys(credit_card[1]);
+		CVC.sendKeys(credit_card[2]);
 		
 		//Switch back to default content
 		_driver.switchTo().defaultContent();
 		
 		//Click on Place Order
+		//waitForElementToDissapear(CheckoutLoader,10)
+		waitForElementToBeClickable(PlaceOrder,10);
 		clickElement(PlaceOrder);
 		waitForElement(ErrorMessage,10);
 	}

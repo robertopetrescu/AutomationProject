@@ -14,24 +14,25 @@ public class Test_003_CheckMandatoryFields extends BaseTest{
 	@Test
 	public void checkMandatoryFields() throws InterruptedException {
 		
-		//open homepage
+		//initialize HomePage
 		HomePage homepage = PageFactory.initElements(driver,HomePage.class);
 		
-		//click on products
+		//Click on products
 		homepage.clickProducts();
 		
-		//initialize Products page
+		//Initialize Products page
 		Products products = PageFactory.initElements(driver,Products.class);
 				
-		//select a product
+		//Select a product
 		products.chooseProduct(4);
 			
-		//initialize product page
+		//Initialize product page
 		Product product = PageFactory.initElements(driver,Product.class);
 		
-		//add to cart and don't close 
+		//Add to cart
 		product.addToCart();
 				
+		//Click on edit Cart
 		product.editCart();
 		
 		Cart cart = PageFactory.initElements(driver,Cart.class);
